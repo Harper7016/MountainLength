@@ -65,13 +65,43 @@ namespace ConsoleApplication1
             }
 
             List<List<int>> listResult = new List<List<int>>();
-            for (int i = 0; i < result.Count - 1; i++)
+            var listTemp = new List<int>();
+            for (int i = 0; i < result.Count; i++)
             {
-                var listTemp = new List<int>();
+                if (i == 0)
+                {
+                    listTemp = result[i];
+                    continue;
+                }
+                listResult.Add(MergeList(listTemp, result[i]));
+                listTemp = result[i];
             }
-
-
+            listResult = listResult.OrderByDescending(i => i.Count()).ToList();
+            Console.WriteLine("************************************************");
+            foreach (var item in listResult)
+            {
+                Console.WriteLine(string.Join(",", item));
+            }
             Console.ReadKey();
+        }
+
+        static List<int> MergeList(List<int> l1, List<int> l2)
+        {
+            var listTemp = l1.ToList();
+            for (int i = 0; i < l2.Count; i++)
+            {
+                l1.Remove(l2[i]);
+                if (l2[i] == l2[i + 1])
+                {
+                    l1.Remove(l2[i + 1]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            l1.AddRange(l2);
+            return l1;
         }
     }
 }
